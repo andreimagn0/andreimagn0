@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Andrei Dominic Magno</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet"/>
+<style>
+
+/* ── PALETTE — from Ghibli reference images ──────────
+   Totoro overcast: #b8c4bc, #9aaead, muted sage greens
+   Kiki greenhouse: #8eb4aa, warm glass amber
+   Ink/charcoal:    #2e2e30, #1c1c1e
+────────────────────────────────────────────────────── */
+:root {
+  --page-bg:    #edeae2;
+  --card-bg:    #f2efe7;
+  --card-bg2:   #f5f2eb;
+  --ink:        #1e1c18;
+  --ink-soft:   #3a3830;
+  --ink-muted:  #6a6860;
+  --moss:       #5a7a5a;
+  --moss-dark:  #3c5a3e;
+  --glass:      #7aa8a0;
+  --rain:       #8aacaa;
+  --rust:       #b04040;
+  --amber:      #b87e3a;
+  --border:     rgba(60,58,50,.12);
+  --shadow:     rgba(28,28,20,.07);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  background: var(--page-bg);
+  color: var(--ink);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  /* subtle page texture */
+  background-image:
+    repeating-linear-gradient(0deg,transparent,transparent 32px,rgba(90,80,50,.012) 32px,rgba(90,80,50,.012) 33px);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Film grain */
+body::before {
+  content:''; position:fixed; inset:0; z-index:9000;
+  pointer-events:none; opacity:.038;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='280' height='280' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size:260px;
+  animation:gr .55s steps(1) infinite;
+}
+@keyframes gr {
+  0%,100%{background-position:0 0}   14%{background-position:-5% -10%}
+  28%{background-position:-16% 7%}   42%{background-position:8% -20%}
+  57%{background-position:-7% 26%}   71%{background-position:14% 3%}
+  85%{background-position:-10% 12%}
+}
+
+/* Cursor */
+.cursor     { position:fixed;z-index:9998;pointer-events:none;width:9px;height:9px;border:1.5px solid var(--moss);border-radius:50%;transform:translate(-50%,-50%);transition:width .16s,height .16s; }
+.cursor-dot { position:fixed;z-index:9999;pointer-events:none;width:3px;height:3px;background:var(--rust);border-radius:50%;transform:translate(-50%,-50%); }
+.cursor.big { width:26px;height:26px;opacity:.5; }
+
+/* ─────────────────────────────────────────────────────
+   HERO STRIP  — full-width atmospheric Ghibli sky
+   Overcast grey-green wash, subtle rain, treeline
+───────────────────────────────────────────────────── */
+#hero-strip {
+  width:100%; height:56px;
+  /* thin atmospheric band at very top */
+  background:linear-gradient(180deg,#aebfba 0%,#b8c8bc 60%,var(--page-bg) 100%);
+  position:relative; overflow:hidden;
+}
+#hero-strip::after {
+  content:''; position:absolute; inset:0;
+  background-image:repeating-linear-gradient(176deg,transparent 0,transparent 5px,rgba(160,185,180,.06) 5px,rgba(160,185,180,.06) 6px,transparent 6px,transparent 24px);
+}
+
+/* ─────────────────────────────────────────────────────
+   MAIN LAYOUT — single column, max-width centered
+   Matches anandthakkar.com structure
+───────────────────────────────────────────────────── */
+.page-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 24px 100px;
+}
+
+/* ─────────────────────────────────────────────────────
+   HERO CARD  — photo + name + tagline + CTAs
+   The "above the fold" intro, like anandthakkar's header
+───────────────────────────────────────────────────── */
+#hero {
+  padding: 64px 0 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.hero-photo-wrap {
+  width: 88px; height: 88px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 28px;
+  /* Greenhouse-toned CSS placeholder until photo is added */
+  background:
+    radial-gradient(ellipse 60% 50% at 65% 20%, rgba(220,205,168,.5) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 70% at 30% 80%, rgba(80,115,90,.5) 0%, transparent 60%),
+    linear-gradient(145deg, #8eb4aa 0%, #6a9882 35%, #527860 65%, #3e5e48 100%);
+  /* glass grid lines — Kiki's greenhouse window */
+  box-shadow:
+    0 2px 12px rgba(28,28,20,.14),
+    inset 0 0 0 2px rgba(255,255,255,.12);
+  position: relative;
+  flex-shrink: 0;
+}
+.hero-photo-wrap::after {
+  content:''; position:absolute; inset:0; border-radius:50%;
+  background-image:
+    linear-gradient(to right,rgba(255,255,255,.07) 1px,transparent 1px),
+    linear-gradient(to bottom,rgba(255,255,255,.07) 1px,transparent 1px);
+  background-size:22px 22px;
+}
+/* Replace background with actual photo — add <img> inside .hero-photo-wrap */
+.hero-photo-wrap img { width:100%;height:100%;object-fit:cover;border-radius:50%;position:relative;z-index:1; }
+
+.hero-name {
+  font-family:'Shippori Mincho',serif;
+  font-size:2rem; font-weight:700;
+  letter-spacing:-.01em; line-height:1.1;
+  color:var(--ink); margin-bottom:6px;
+}
+.hero-role {
+  font-family:'IM Fell English',serif; font-style:italic;
+  font-size:1.02rem; color:var(--ink-muted);
+  margin-bottom:18px; line-height:1.5;
+}
+.hero-role span { color:var(--moss); }
+
+.hero-bio {
+  font-size:1.05rem; line-height:1.95; font-weight:300;
+  color:var(--ink-soft); max-width:580px;
+  margin-bottom:30px;
+}
+
+.hero-btns { display:flex; gap:12px; flex-wrap:wrap; }
+.btn {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:9px 22px;
+  font-family:'Shippori Mincho',serif;
+  font-size:.78rem; letter-spacing:.12em;
+  text-decoration:none; border-radius:1px;
+  transition:background .24s, color .24s, border-color .24s;
+}
+.btn-primary {
+  background:var(--moss-dark); color:#f2efe7;
+  border:1px solid var(--moss-dark);
+}
+.btn-primary:hover { background:var(--moss); border-color:var(--moss); }
+.btn-ghost {
+  background:transparent; color:var(--ink-soft);
+  border:1px solid var(--border);
+}
+.btn-ghost:hover { border-color:var(--moss); color:var(--moss-dark); }
+
+/* Social row */
+.hero-social { display:flex; gap:20px; margin-top:32px; padding-top:28px; border-top:1px solid var(--border); width:100%; }
+.soc-link {
+  font-family:'Shippori Mincho',serif;
+  font-size:.72rem; letter-spacing:.16em;
+  color:var(--ink-muted); text-decoration:none;
+  transition:color .2s;
+}
+.soc-link:hover { color:var(--moss-dark); }
+
+/* ─────────────────────────────────────────────────────
+   SECTION HEADER — consistent across all sections
+───────────────────────────────────────────────────── */
+.section-head {
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:20px; margin-top:56px;
+}
+.section-head h2 {
+  font-family:'Shippori Mincho',serif;
+  font-size:1.1rem; font-weight:700;
+  letter-spacing:.08em; color:var(--ink);
+}
+.section-head .emoji { font-size:1.1rem; }
+.section-rule {
+  flex:1; height:1px;
+  background:linear-gradient(to right,var(--border),transparent);
+}
+
+/* ─────────────────────────────────────────────────────
+   CARD — shared style for all content cards
+   Feels like a worn field notebook page
+───────────────────────────────────────────────────── */
+.card {
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:3px;
+  padding:24px 26px;
+  margin-bottom:14px;
+  box-shadow:0 2px 14px var(--shadow), 0 1px 4px rgba(28,28,20,.04);
+  position:relative;
+  overflow:hidden;
+  transition:box-shadow .28s, transform .28s;
+}
+.card:hover {
+  box-shadow:0 6px 28px rgba(28,28,20,.11), 0 1px 4px rgba(28,28,20,.04);
+  transform:translateY(-2px);
+}
+/* Faint watercolour accent — top edge colour per section */
+.card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(to right, var(--card-accent,transparent), transparent 80%);
+}
+
+/* Card inner layout variants */
+.card-row {
+  display:flex; gap:18px; align-items:flex-start;
+}
+.card-icon {
+  width:44px; height:44px; border-radius:2px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.3rem;
+  /* Watercolour wash — overridden per card */
+  background:var(--card-icon-bg, linear-gradient(135deg,#b8c8bc,#8aacaa));
+}
+.card-content { flex:1; min-width:0; }
+
+.card-label {
+  font-family:'Shippori Mincho',serif;
+  font-size:.66rem; letter-spacing:.28em; text-transform:uppercase;
+  color:var(--moss); margin-bottom:5px; display:block;
+}
+.card-title {
+  font-family:'Shippori Mincho',serif;
+  font-size:1.02rem; font-weight:700;
+  color:var(--ink); margin-bottom:4px; line-height:1.3;
+}
+.card-sub {
+  font-family:'IM Fell English',serif; font-style:italic;
+  font-size:.9rem; color:var(--ink-muted); margin-bottom:8px;
+}
+.card-body {
+  font-size:.97rem; line-height:1.88; font-weight:300;
+  color:var(--ink-soft);
+}
+.card-body p { margin-bottom:8px; }
+.card-body p:last-child { margin-bottom:0; }
+
+/* Tags / chips */
+.tags { display:flex; flex-wrap:wrap; gap:7px 6px; margin-top:14px; }
+.tag {
+  font-family:'Shippori Mincho',serif;
+  font-size:.67rem; letter-spacing:.1em;
+  padding:4px 12px;
+  border:1px solid rgba(60,90,62,.28);
+  color:var(--moss-dark); background:rgba(90,122,90,.07);
+  border-radius:1px; cursor:default;
+  transition:background .2s;
+}
+.tag:hover { background:rgba(90,122,90,.16); }
+
+/* Card links row */
+.card-links { display:flex; gap:18px; margin-top:16px; }
+.card-link {
+  font-family:'Shippori Mincho',serif;
+  font-size:.7rem; letter-spacing:.14em;
+  color:var(--moss-dark); text-decoration:none;
+  display:inline-flex; align-items:center; gap:4px;
+  transition:color .2s;
+}
+.card-link:hover { color:var(--rust); }
+
+/* Date badge */
+.card-date {
+  font-family:'Shippori Mincho',serif;
+  font-size:.66rem; letter-spacing:.14em;
+  color:var(--ink-muted); opacity:.7;
+}
+
+/* ── Project card — has a tinted header wash ────────*/
+.proj-card {
+  padding:0;
+  cursor:pointer;
+}
+.proj-wash {
+  height:110px; width:100%; position:relative;
+  border-radius:2px 2px 0 0;
+  overflow:hidden;
+}
+.proj-wash::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:40%;
+  background:linear-gradient(to top,rgba(28,28,20,.18),transparent);
+}
+.pw-water {
+  background:
+    radial-gradient(ellipse 60% 60% at 80% 20%,rgba(190,218,224,.6) 0%,transparent 55%),
+    radial-gradient(ellipse 70% 50% at 10% 80%,rgba(100,155,145,.45) 0%,transparent 55%),
+    linear-gradient(145deg,#98c0c0 0%,#7aaab0 40%,#5a8888 70%,#3e6868 100%);
+}
+.pw-forest {
+  background:
+    radial-gradient(ellipse 50% 60% at 50% 0%,rgba(130,175,130,.35) 0%,transparent 55%),
+    radial-gradient(ellipse 80% 50% at 15% 100%,rgba(52,80,55,.55) 0%,transparent 60%),
+    radial-gradient(ellipse 80% 50% at 85% 100%,rgba(46,74,50,.5) 0%,transparent 55%),
+    linear-gradient(180deg,#9ab89a 0%,#78987a 30%,#4e7052 65%,#344e36 100%);
+}
+.pw-dusk {
+  background:
+    radial-gradient(ellipse 45% 55% at 62% 28%,rgba(220,185,130,.6) 0%,transparent 55%),
+    radial-gradient(ellipse 70% 45% at 88% 80%,rgba(160,130,100,.4) 0%,transparent 55%),
+    radial-gradient(ellipse 70% 50% at 8% 75%,rgba(78,100,88,.45) 0%,transparent 60%),
+    linear-gradient(180deg,#c8a870 0%,#b09060 35%,#887060 65%,#4e4840 100%);
+}
+.proj-body { padding:20px 22px 22px; }
+
+/* ─────────────────────────────────────────────────────
+   EDUCATION — special layout
+───────────────────────────────────────────────────── */
+.edu-card { --card-accent:#7aa8a0; }
+.edu-card .card-icon { background:linear-gradient(135deg,#b8cec8,#8aacaa); }
+
+/* ─────────────────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────────────────── */
+footer {
+  margin-top:72px; padding:32px 0 24px;
+  border-top:1px solid var(--border);
+  text-align:center;
+}
+footer p {
+  font-family:'Shippori Mincho',serif;
+  font-size:.68rem; letter-spacing:.22em;
+  color:var(--ink-muted); opacity:.55;
+}
+
+/* ─────────────────────────────────────────────────────
+   SCROLL REVEAL
+───────────────────────────────────────────────────── */
+.rv {
+  opacity:0; transform:translateY(22px);
+  transition:opacity .75s cubic-bezier(.2,.8,.2,1), transform .75s cubic-bezier(.2,.8,.2,1);
+}
+.rv.on { opacity:1; transform:translateY(0); }
+
+/* Stagger siblings */
+.rv:nth-child(2){transition-delay:.06s}
+.rv:nth-child(3){transition-delay:.12s}
+.rv:nth-child(4){transition-delay:.18s}
+.rv:nth-child(5){transition-delay:.24s}
+
+/* ─────────────────────────────────────────────────────
+   FIREFLIES
+───────────────────────────────────────────────────── */
+.ff {
+  position:fixed; width:3px; height:3px;
+  background:rgba(210,200,95,.9); border-radius:50%;
+  pointer-events:none; z-index:8990;
+  box-shadow:0 0 5px 2px rgba(210,200,95,.4);
+  animation:ffm ease-in-out infinite,ffg ease-in-out infinite;
+}
+@keyframes ffm {
+  0%{transform:translate(0,0)} 25%{transform:translate(var(--ax),var(--ay))}
+  50%{transform:translate(var(--bx),var(--by))} 75%{transform:translate(var(--cx),var(--cy))}
+  100%{transform:translate(0,0)}
+}
+@keyframes ffg {
+  0%,100%{opacity:0} 30%,65%{opacity:.8} 50%{opacity:.3}
+}
+
+/* ─────────────────────────────────────────────────────
+   ATMOSPHERIC STRIP at very top of page
+───────────────────────────────────────────────────── */
+.atmo-strip {
+  width:100%; height:5px;
+  background:linear-gradient(to right,#9aaead,#8eb4aa,#b8c4bc,#9aaead);
+}
+
+/* ─────────────────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────────────────── */
+@media(max-width:600px){
+  .hero-name{font-size:1.6rem;}
+  .card-row{flex-direction:column;}
+  .hero-btns{flex-direction:column;}
+  .page-wrap{padding:0 18px 80px;}
+}
+
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+<div class="cursor-dot" id="dot"></div>
+
+<!-- Thin Ghibli colour band at very top -->
+<div class="atmo-strip"></div>
+
+<!-- Atmospheric sky strip -->
+<div id="hero-strip"></div>
+
+<main class="page-wrap">
+
+  <!-- ══ HERO ═══════════════════════════════════════════ -->
+  <section id="hero">
+
+    <!-- Swap this div for <img src="your-photo.jpg"> inside .hero-photo-wrap -->
+    <div class="hero-photo-wrap">
+      <!-- <img src="your-photo.jpg" alt="Andrei Dominic Magno"> -->
+    </div>
+
+    <h1 class="hero-name">Andrei Dominic Magno</h1>
+    <p class="hero-role">
+      CS Student at SDSU &nbsp;·&nbsp;
+      <span>AI &amp; Full-Stack Developer</span>
+    </p>
+
+    <p class="hero-bio">
+      Building at the intersection of AI and software engineering. I work with full-stack web technologies and AI systems — from RAG pipelines to React apps — and I thrive in collaborative, fast-moving environments like hackathons. Seeking software engineering or AI/ML internship opportunities.
+    </p>
+
+    <div class="hero-btns">
+      <a href="mailto:andrei.b.magno@gmail.com" class="btn btn-primary">✉ &nbsp;Get in touch</a>
+      <a href="#" class="btn btn-ghost">Download résumé ↓</a>
+    </div>
+
+    <div class="hero-social">
+      <a href="#" class="soc-link">GitHub ↗</a>
+      <a href="https://www.linkedin.com/in/andrei-dominic-magno" target="_blank" class="soc-link">LinkedIn ↗</a>
+      <a href="mailto:andrei.b.magno@gmail.com" class="soc-link">andrei.b.magno@gmail.com</a>
+      <a href="tel:9255978951" class="soc-link">(925) 597-8951</a>
+    </div>
+
+  </section>
+
+  <!-- ══ EDUCATION ══════════════════════════════════════ -->
+  <div class="section-head rv">
+    <h2>Education</h2><span class="emoji">🎓</span>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="card edu-card card-row rv">
+    <div class="card-icon" style="background:linear-gradient(135deg,#b0c8c4,#7aa8a0);">🏛️</div>
+    <div class="card-content">
+      <span class="card-label">Bachelor of Science</span>
+      <div class="card-title">San Diego State University</div>
+      <div class="card-sub">B.S. Computer Science, Minor in Mathematics &nbsp;·&nbsp; Expected May 2027</div>
+      <div class="card-body">Data Structures, Algorithms, Object-Oriented Programming, Software Systems, Computer Organization, Computer Architecture, Unix System Administration.</div>
+    </div>
+  </div>
+
+  <!-- ══ PROJECTS ═══════════════════════════════════════ -->
+  <div class="section-head rv">
+    <h2>Projects</h2><span class="emoji">👨‍💻</span>
+    <div class="section-rule"></div>
+  </div>
+
+  <!-- Project 1 — Medignos -->
+  <div class="card proj-card rv">
+    <div class="proj-wash pw-dusk"></div>
+    <div class="proj-body">
+      <span class="card-label">Hackathon &nbsp;·&nbsp; April 2025</span>
+      <div class="card-title">Medignos</div>
+      <div class="card-body">
+        <p>A healthcare-focused ML prototype built under hackathon constraints. Trained an image classification model for basic skin condition recognition, integrating it into a system that returns real-time informational responses from image inputs.</p>
+        <p>Gained hands-on experience with data quality tradeoffs, model architecture decisions, and the added responsibility of building in a healthcare context.</p>
+      </div>
+      <div class="tags">
+        <span class="tag">React</span>
+        <span class="tag">Flask</span>
+        <span class="tag">Python</span>
+        <span class="tag">ML / Image Classification</span>
+        <span class="tag">Hackathon</span>
+      </div>
+      <div class="card-links">
+        <a href="#" class="card-link">GitHub ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project 2 — ClubHub -->
+  <div class="card proj-card rv">
+    <div class="proj-wash pw-forest"></div>
+    <div class="proj-body">
+      <span class="card-label">AI / Backend &nbsp;·&nbsp; November 2025</span>
+      <div class="card-title">ClubHub — AI-Powered RAG Chatbot</div>
+      <div class="card-body">
+        <p>Designed and built a backend system that retrieves and structures documentation to generate accurate, context-grounded responses using Retrieval-Augmented Generation.</p>
+        <p>Built relational schemas in PostgreSQL with pgvector for semantic search, and created data pipelines to parse unstructured PDFs into queryable structured formats.</p>
+      </div>
+      <div class="tags">
+        <span class="tag">Python</span>
+        <span class="tag">LangChain</span>
+        <span class="tag">Gemini API</span>
+        <span class="tag">RAG</span>
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">pgvector</span>
+      </div>
+      <div class="card-links">
+        <a href="#" class="card-link">GitHub ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SKILLS ══════════════════════════════════════════ -->
+  <div class="section-head rv">
+    <h2>Skills &amp; Tools</h2><span class="emoji">⚙️</span>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="card rv">
+    <div class="card-row" style="flex-wrap:wrap; gap:28px;">
+
+      <div style="flex:1;min-width:180px;">
+        <span class="card-label">Languages</span>
+        <div class="tags" style="margin-top:10px;">
+          <span class="tag">Python</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">React</span>
+          <span class="tag">Node.js</span>
+          <span class="tag">Flask</span>
+        </div>
+      </div>
+
+      <div style="flex:1;min-width:180px;">
+        <span class="card-label">AI / ML</span>
+        <div class="tags" style="margin-top:10px;">
+          <span class="tag">RAG</span>
+          <span class="tag">LangChain</span>
+          <span class="tag">Gemini API</span>
+          <span class="tag">Image Classification</span>
+          <span class="tag">Prompt Eng.</span>
+        </div>
+      </div>
+
+      <div style="flex:1;min-width:180px;">
+        <span class="card-label">Data &amp; Backend</span>
+        <div class="tags" style="margin-top:10px;">
+          <span class="tag">PostgreSQL</span>
+          <span class="tag">pgvector</span>
+          <span class="tag">Semantic Search</span>
+          <span class="tag">PDF Pipelines</span>
+          <span class="tag">REST APIs</span>
+        </div>
+      </div>
+
+      <div style="flex:1;min-width:180px;">
+        <span class="card-label">Tools</span>
+        <div class="tags" style="margin-top:10px;">
+          <span class="tag">Git / GitHub</span>
+          <span class="tag">Unix / Linux</span>
+          <span class="tag">VS Code</span>
+          <span class="tag">Figma</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ EXPERIENCE ══════════════════════════════════════ -->
+  <div class="section-head rv">
+    <h2>Experience</h2><span class="emoji">💼</span>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="card card-row rv">
+    <div class="card-icon" style="background:linear-gradient(135deg,#b8c8c0,#7aaa98);">🤖</div>
+    <div class="card-content">
+      <span class="card-label">March 2025 – Ongoing</span>
+      <div class="card-title">AI Club — Multimedia Specialist</div>
+      <div class="card-sub">San Diego State University &nbsp;·&nbsp; San Diego, CA</div>
+      <div class="card-body">
+        Supported a technical student organization by managing digital platforms and showcasing member projects. Drove 16K+ post views and 43% follower growth in 90 days through structured content delivery. Coordinated with leadership on meeting documentation and communication.
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-row rv">
+    <div class="card-icon" style="background:linear-gradient(135deg,#c0c8b8,#8aaa78);">🏛️</div>
+    <div class="card-content">
+      <span class="card-label">August 2025 – Ongoing</span>
+      <div class="card-title">College of Sciences Council — Representative</div>
+      <div class="card-sub">San Diego State University &nbsp;·&nbsp; San Diego, CA</div>
+      <div class="card-body">
+        Represent student organization interests in weekly council meetings. Contribute to discussions and voting on budgets, event proposals, and academic policies. Bridge communication between organizations to improve coordination and engagement.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ LOOKING FOR ══════════════════════════════════════ -->
+  <div class="section-head rv">
+    <h2>Currently Seeking</h2><span class="emoji">🌿</span>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="card rv" style="--card-accent:#7aa8a0;">
+    <div class="card-body" style="font-size:1.05rem;line-height:2;">
+      <p>I'm actively looking for <strong style="color:var(--ink);font-weight:400;">Software Engineering</strong> or <strong style="color:var(--ink);font-weight:400;">AI/ML Internship</strong> opportunities — ideally at companies building meaningful products where I can contribute from day one.</p>
+      <p>I love learning new tools and am always up for a good conversation about tech, projects, or what you're building.</p>
+    </div>
+    <div class="hero-btns" style="margin-top:20px;">
+      <a href="mailto:andrei.b.magno@gmail.com" class="btn btn-primary">Let's connect ↗</a>
+      <a href="#" class="btn btn-ghost">Download résumé</a>
+    </div>
+  </div>
+
+  <!-- ══ FOOTER ══════════════════════════════════════════ -->
+  <footer>
+    <p>© 2026 &nbsp;Andrei Dominic Magno &nbsp;·&nbsp; San Diego, CA &nbsp;·&nbsp; 春</p>
+  </footer>
+
+</main>
+
+<script>
+/* Cursor */
+const cur=document.getElementById('cur'),dot=document.getElementById('dot');
+let mx=0,my=0,cx=0,cy=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+(function loop(){cx+=(mx-cx)*.14;cy+=(my-cy)*.14;cur.style.left=cx+'px';cur.style.top=cy+'px';requestAnimationFrame(loop);})();
+document.querySelectorAll('a,button,.proj-card,.tag,.btn').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cur.classList.add('big'));
+  el.addEventListener('mouseleave',()=>cur.classList.remove('big'));
+});
+
+/* Scroll reveal */
+const obs=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting) e.target.classList.add('on');});
+},{threshold:.08});
+document.querySelectorAll('.rv').forEach(r=>obs.observe(r));
+
+/* Fireflies — subtle, just a handful */
+for(let i=0;i<8;i++){
+  const f=document.createElement('div'); f.className='ff';
+  f.style.left=Math.random()*100+'vw';
+  f.style.top=(50+Math.random()*45)+'vh';
+  const r=()=>(Math.random()-.5)*110+'px';
+  f.style.setProperty('--ax',r()); f.style.setProperty('--ay',r());
+  f.style.setProperty('--bx',r()); f.style.setProperty('--by',r());
+  f.style.setProperty('--cx',r()); f.style.setProperty('--cy',r());
+  const d=8+Math.random()*10;
+  f.style.animationDuration=`${d}s,${2+Math.random()*3}s`;
+  f.style.animationDelay=`${-Math.random()*d}s,${-Math.random()*3}s`;
+  document.body.appendChild(f);
+}
+</script>
+</body>
+</html>
