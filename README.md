@@ -1,4 +1,8 @@
+# Hi, I'm Andrei Magno! 👋
 
-Hi, I'm Andrei Magno!
-🎓 Senior @ San Diego State University, Majoring in Computer Science, Minoring in Mathematics
-🔭 Aspiring Data Scientist and Machine Learning Engineer
+🎓 Senior at **San Diego State University** studying **Computer Science** with a minor in **Mathematics**
+
+🔭 Aspiring **Data Scientist** and **Machine Learning Engineer**
+
+💡 Interested in data analysis, machine learning, and building practical software solutions.
+
